@@ -73,14 +73,6 @@ class ValidadorMisionTest {
     @Test
     @DisplayName("Mision invalida por excepcion retorna false")
     void misionInvalida_retornaFalse() {
-        DroneAcuatico d = new DroneAcuatico("AR-11", "Aqua-Ranger", 100, false, "Centro");
-        
-        // Simular que lanza excepción en la construcción de la misión o en la validación.
-        // Dado que el Mision.Builder ya arroja IllegalStateException si el drone no está disponible,
-        // no podemos instanciar la misión para probar v.esValida() directamente usando el builder si falla antes.
-        // Por eso probaremos con un drone null, pero el builder no lo permite.
-        // Vamos a instanciar Mision con un Builder mockeado o válido, pero fallando en ValidadorMision.
-        // La forma más simple es que ValidadorMision arroje algo. 
         DroneAcuatico dValido = new DroneAcuatico("AR-12", "Aqua-Ranger", 100, true, "Centro");
         Mision m = new Mision.Builder()
             .id("M-02")
@@ -91,5 +83,17 @@ class ValidadorMisionTest {
             .build();
             
         assertFalse(v.esValida(m));
+    }
+
+    @Test
+    @DisplayName("tieneBateriaSuficiente con drone nulo retorna false")
+    void droneNulo_bateriaFalsa() {
+        assertFalse(v.tieneBateriaSuficiente(null));
+    }
+
+    @Test
+    @DisplayName("validarDisponibilidad con drone nulo lanza IllegalStateException")
+    void droneNulo_disponibilidadLanzaExcepcion() {
+        assertThrows(IllegalStateException.class, () -> v.validarDisponibilidad(null));
     }
 }
