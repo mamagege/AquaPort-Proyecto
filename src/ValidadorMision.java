@@ -17,7 +17,7 @@ public class ValidadorMision {
             validarDisponibilidad(mision.getDrone());
             validarPuntoLlegada(mision.getPuntoLlegada());
             return tieneBateriaSuficiente(mision.getDrone());
-        } catch (Exception e) {
+        } catch (IllegalArgumentException | IllegalStateException e) {
             return false;
         }
     }

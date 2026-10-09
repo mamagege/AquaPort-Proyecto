@@ -1,3 +1,6 @@
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 /**
  * Clase NotificadorOperador.
  * 
@@ -12,11 +15,17 @@
  *   se pasa de imprimir en consola a enviar un Email o un SMS, solo se modificará esta clase.
  */
 public class NotificadorOperador {
+    private static final Logger LOGGER = Logger.getLogger(NotificadorOperador.class.getName());
+
     public void notificarExito(String mensaje) {
-        System.out.println("✅ [OPERADOR] " + mensaje);
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.info(String.format("✅ [OPERADOR] %s", mensaje));
+        }
     }
     
     public void notificarError(String mensaje) {
-        System.err.println("❌ [OPERADOR ERROR] " + mensaje);
+        if (LOGGER.isLoggable(Level.SEVERE)) {
+            LOGGER.severe(String.format("🛑 [OPERADOR ERROR] %s", mensaje));
+        }
     }
 }
