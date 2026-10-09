@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="DomainV2Test" time="0.181" tests="8" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="DomainV2Test" time="0.151" tests="8" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -15,7 +15,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="MX"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Eclipse Adoptium\jdk-21.0.12.101-hotspot\bin"/>
-    <property name="sun.java.command" value="C:\Users\USUARIO\AppData\Local\Temp\surefire14275185931314421985\surefirebooter-20261009155913937_3.jar C:\Users\USUARIO\AppData\Local\Temp\surefire14275185931314421985 2026-10-09T15-59-13_807-jvmRun1 surefire-20261009155913937_1tmp surefire_0-20261009155913937_2tmp"/>
+    <property name="sun.java.command" value="C:\Users\USUARIO\AppData\Local\Temp\surefire9003733615009060762\surefirebooter-20261009160817838_3.jar C:\Users\USUARIO\AppData\Local\Temp\surefire9003733615009060762 2026-10-09T16-08-17_671-jvmRun1 surefire-20261009160817838_1tmp surefire_0-20261009160817838_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="C:\Users\USUARIO\Desktop\Universidad\DOWS\CORTE02\AquaPort-Proyecto\target\test-classes;C:\Users\USUARIO\Desktop\Universidad\DOWS\CORTE02\AquaPort-Proyecto\target\classes;C:\Users\USUARIO\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.1\junit-jupiter-api-5.10.1.jar;C:\Users\USUARIO\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\USUARIO\.m2\repository\org\junit\platform\junit-platform-commons\1.10.1\junit-platform-commons-1.10.1.jar;C:\Users\USUARIO\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\USUARIO\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.1\junit-jupiter-engine-5.10.1.jar;C:\Users\USUARIO\.m2\repository\org\junit\platform\junit-platform-engine\1.10.1\junit-platform-engine-1.10.1.jar;C:\Users\USUARIO\.m2\repository\org\mockito\mockito-core\5.10.0\mockito-core-5.10.0.jar;C:\Users\USUARIO\.m2\repository\net\bytebuddy\byte-buddy\1.14.11\byte-buddy-1.14.11.jar;C:\Users\USUARIO\.m2\repository\net\bytebuddy\byte-buddy-agent\1.14.11\byte-buddy-agent-1.14.11.jar;C:\Users\USUARIO\.m2\repository\org\objenesis\objenesis\3.3\objenesis-3.3.jar;C:\Users\USUARIO\.m2\repository\org\mockito\mockito-junit-jupiter\5.10.0\mockito-junit-jupiter-5.10.0.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -30,7 +30,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\USUARIO\AppData\Local\Temp\surefire14275185931314421985\surefirebooter-20261009155913937_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\USUARIO\AppData\Local\Temp\surefire9003733615009060762\surefirebooter-20261009160817838_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="21.0.12.1+1-LTS"/>
@@ -59,31 +59,31 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="testMisionBuilder" classname="DomainV2Test" time="0.004"/>
-  <testcase name="testConsultorFlota" classname="DomainV2Test" time="0.024">
+  <testcase name="testMisionBuilder" classname="DomainV2Test" time="0.003"/>
+  <testcase name="testConsultorFlota" classname="DomainV2Test" time="0.019">
     <system-out><![CDATA[=== Resultados de las 5 Consultas ===
-1. Drones disponibles  y > 35% batería: [DroneSuperficial@7cfac39f, DroneSuperficial@158ae284, DroneSuperficial@50eb4a2c]
+1. Drones disponibles  y > 35% batería: [DroneSuperficial@483b0690, DroneSuperficial@687e6293, DroneSuperficial@6870c3c2]
 2. IDs de drones disponibles: [AR-01, AR-02, AR-04]
 3. ¿Existe dron disp. y > 35% batería?: true
 4. Número de drones disponibles: 3
 5. Dron con mayor batería: AR-01 (92%)
 ]]></system-out>
   </testcase>
-  <testcase name="testDronesAndFactory" classname="DomainV2Test" time="0.004"/>
-  <testcase name="testObservers" classname="DomainV2Test" time="0.008">
+  <testcase name="testDronesAndFactory" classname="DomainV2Test" time="0.003"/>
+  <testcase name="testObservers" classname="DomainV2Test" time="0.004">
     <system-out><![CDATA[[ALERTA CENTRO CONTROL] Drone en FALLO: D-01 en zona Z1
 [ALERTA CENTRO CONTROL] Misión fallida: null sin drones disponibles.
 [ALERTA TÉCNICO] Requiere revisión inmediata: Drone D-01
 ]]></system-out>
   </testcase>
-  <testcase name="testStrategies" classname="DomainV2Test" time="0.009"/>
-  <testcase name="testNotificadorOperador" classname="DomainV2Test" time="0.012">
-    <system-err><![CDATA[oct 09, 2026 3:59:16 P. M. NotificadorOperador notificarExito
+  <testcase name="testStrategies" classname="DomainV2Test" time="0.006"/>
+  <testcase name="testNotificadorOperador" classname="DomainV2Test" time="0.004">
+    <system-err><![CDATA[oct 09, 2026 4:08:20 P. M. NotificadorOperador notificarExito
 INFORMACIÓN: ✅ [OPERADOR] Exito
-oct 09, 2026 3:59:16 P. M. NotificadorOperador notificarError
+oct 09, 2026 4:08:20 P. M. NotificadorOperador notificarError
 GRAVE: 🛑 [OPERADOR ERROR] Error
 ]]></system-err>
   </testcase>
   <testcase name="testConsultorFlotaV2" classname="DomainV2Test" time="0.01"/>
-  <testcase name="testRegistradorMisiones" classname="DomainV2Test" time="0.1"/>
+  <testcase name="testRegistradorMisiones" classname="DomainV2Test" time="0.093"/>
 </testsuite>

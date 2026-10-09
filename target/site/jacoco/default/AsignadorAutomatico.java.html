@@ -48,46 +48,48 @@ public class AsignadorAutomatico {
 <span class="fc" id="L48">                candidatoOpt = estrategia.seleccionar(flotaActiva, mision);</span>
             } else {
                 // Happy path
-<span class="fc" id="L51">                System.out.println(&quot;Drone &quot; + drone.getId() + &quot; asignado exitosamente.&quot;);</span>
-<span class="fc" id="L52">                return Optional.of(drone);</span>
+                // SonarQube fix: Use logger instead of System.out.println
+<span class="fc" id="L52">                java.util.logging.Logger.getLogger(AsignadorAutomatico.class.getName())</span>
+<span class="fc" id="L53">                    .info(&quot;Drone &quot; + drone.getId() + &quot; asignado exitosamente.&quot;);</span>
+<span class="fc" id="L54">                return Optional.of(drone);</span>
             }
-<span class="fc" id="L54">        }</span>
+<span class="fc" id="L56">        }</span>
 
         // Si la lista se agotó y no hubo candidato apto
-<span class="fc bfc" id="L57" title="All 2 branches covered.">        if (mision.getPrioridad() == Prioridad.CRITICA) {</span>
-<span class="fc" id="L58">            notificarFalloAsignacion(mision);</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (mision.getPrioridad() == Prioridad.CRITICA) {</span>
+<span class="fc" id="L60">            notificarFalloAsignacion(mision);</span>
         }
-<span class="fc" id="L60">        return Optional.empty();</span>
+<span class="fc" id="L62">        return Optional.empty();</span>
     }
 
     private void notificarFalloAsignacion(Mision mision) {
-<span class="fc bfc" id="L64" title="All 2 branches covered.">        for (ObservadorMision observer : observadores) {</span>
-<span class="fc" id="L65">            observer.notificarFalloAsignacion(mision);</span>
-<span class="fc" id="L66">        }</span>
-<span class="fc" id="L67">    }</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        for (ObservadorMision observer : observadores) {</span>
+<span class="fc" id="L67">            observer.notificarFalloAsignacion(mision);</span>
+<span class="fc" id="L68">        }</span>
+<span class="fc" id="L69">    }</span>
 
     private void notificarDroneFallo(DroneAcuatico drone) {
-<span class="fc bfc" id="L70" title="All 2 branches covered.">        for (ObservadorMision observer : observadores) {</span>
-<span class="fc" id="L71">            observer.onDroneFallo(drone);</span>
-<span class="fc" id="L72">        }</span>
-<span class="fc" id="L73">    }</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        for (ObservadorMision observer : observadores) {</span>
+<span class="fc" id="L73">            observer.onDroneFallo(drone);</span>
+<span class="fc" id="L74">        }</span>
+<span class="fc" id="L75">    }</span>
 
     public Mision asignarMultiEtapa(String origen, String destino, TipoCarga carga) throws FalloDroneException, BateriaCriticaException {
         // En un caso real, busca un drone y lo asigna.
-<span class="nc" id="L77">        return null;</span>
+<span class="nc" id="L79">        return null;</span>
     }
 
     public boolean isZonaActiva(String zona) {
-<span class="nc" id="L81">        return true;</span>
+<span class="nc" id="L83">        return true;</span>
     }
 
     public void reasignarDrone(String zona) {
-<span class="nc" id="L85">    }</span>
+<span class="nc" id="L87">    }</span>
 
     public void validarCustodia(Mision mision) throws CustodiaInterrumpidaException {
-<span class="fc" id="L88">    }</span>
+<span class="fc" id="L90">    }</span>
 
     public void retornarABase(String zona) {
-<span class="nc" id="L91">    }</span>
+<span class="nc" id="L93">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
