@@ -49,4 +49,47 @@ class ValidadorMisionTest {
     void zonaDestinoInvalida_lanzaExcepcion() {
         assertThrows(IllegalArgumentException.class, () -> v.validarPuntoLlegada("Zona Restringida"));
     }
+
+    @Test
+    @DisplayName("Mision válida retorna true")
+    void misionValida_retornaTrue() {
+        DroneAcuatico d = new DroneAcuatico("AR-10", "Aqua-Ranger", 100, true, "Centro");
+        Mision m = new Mision.Builder()
+            .id("M-01")
+            .drone(d)
+            .puntoPartida("Centro")
+            .puntoLlegada("Norte")
+            .tipoCarga(TipoCarga.MUESTRA_AGUA)
+            .build();
+        assertTrue(v.esValida(m));
+    }
+
+    @Test
+    @DisplayName("Mision nula retorna false")
+    void misionNula_retornaFalse() {
+        assertFalse(v.esValida(null));
+    }
+
+    @Test
+    @DisplayName("Mision invalida por excepcion retorna false")
+    void misionInvalida_retornaFalse() {
+        DroneAcuatico d = new DroneAcuatico("AR-11", "Aqua-Ranger", 100, false, "Centro");
+        
+        // Simular que lanza excepción en la construcción de la misión o en la validación.
+        // Dado que el Mision.Builder ya arroja IllegalStateException si el drone no está disponible,
+        // no podemos instanciar la misión para probar v.esValida() directamente usando el builder si falla antes.
+        // Por eso probaremos con un drone null, pero el builder no lo permite.
+        // Vamos a instanciar Mision con un Builder mockeado o válido, pero fallando en ValidadorMision.
+        // La forma más simple es que ValidadorMision arroje algo. 
+        DroneAcuatico dValido = new DroneAcuatico("AR-12", "Aqua-Ranger", 100, true, "Centro");
+        Mision m = new Mision.Builder()
+            .id("M-02")
+            .drone(dValido)
+            .puntoPartida("Centro")
+            .puntoLlegada("Zona Restringida") // ValidadorMision arrojará excepcion aquí.
+            .tipoCarga(TipoCarga.MUESTRA_AGUA)
+            .build();
+            
+        assertFalse(v.esValida(m));
+    }
 }
