@@ -1,15 +1,3 @@
-/**
- * Clase Mision que implementa el patrón Builder.
- * 
- * Guía paso a paso para replicar el patrón Builder:
- * 
- * 1. Atributos inmutables en la clase principal: Se declaran como private final.
- * 2. Constructor privado: Recibe el Builder como parámetro y asigna sus valores a la clase.
- * 3. Clase interna estática (Builder): Se declara public static class Builder.
- * 4. Atributos mutables en el Builder: Se declaran los mismos atributos, pero sin final.
- * 5. Métodos de configuración (Setters encadenables): Retornan la misma instancia (this).
- * 6. Método build() con validaciones: Verifica las reglas de negocio y retorna la nueva instancia.
- */
 public class Mision {
     private final String id;
     private final DroneAcuatico drone;
@@ -17,6 +5,7 @@ public class Mision {
     private final String puntoLlegada;
     private final TipoCarga tipoCarga;
     private final EstadoMision estado;
+    private final Prioridad prioridad;
 
     private Mision(Builder builder) {
         this.id = builder.id;
@@ -25,6 +14,7 @@ public class Mision {
         this.puntoLlegada = builder.puntoLlegada;
         this.tipoCarga = builder.tipoCarga;
         this.estado = builder.estado;
+        this.prioridad = builder.prioridad;
     }
 
     public String getId() { return id; }
@@ -33,6 +23,7 @@ public class Mision {
     public String getPuntoLlegada() { return puntoLlegada; }
     public TipoCarga getTipoCarga() { return tipoCarga; }
     public EstadoMision getEstado() { return estado; }
+    public Prioridad getPrioridad() { return prioridad; }
 
     public static class Builder {
         private String id;
@@ -40,7 +31,8 @@ public class Mision {
         private String puntoPartida;
         private String puntoLlegada;
         private TipoCarga tipoCarga;
-        private EstadoMision estado = EstadoMision.PENDIENTE; // Valor por defecto
+        private EstadoMision estado = EstadoMision.PENDIENTE;
+        private Prioridad prioridad = Prioridad.NORMAL;
 
         public Builder id(String id) {
             this.id = id;
@@ -72,6 +64,11 @@ public class Mision {
             return this;
         }
 
+        public Builder prioridad(Prioridad prioridad) {
+            this.prioridad = prioridad;
+            return this;
+        }
+
         public Mision build() {
             if (id == null || id.trim().isEmpty()) {
                 throw new IllegalStateException("El id de la misión no puede ser nulo o vacío.");
@@ -90,6 +87,9 @@ public class Mision {
             }
             if (tipoCarga == null) {
                 throw new IllegalStateException("El tipo de carga no puede ser nulo.");
+            }
+            if (prioridad == null) {
+                throw new IllegalStateException("La prioridad no puede ser nula.");
             }
 
             return new Mision(this);

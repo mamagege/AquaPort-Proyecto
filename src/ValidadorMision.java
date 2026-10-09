@@ -24,7 +24,7 @@ public class ValidadorMision {
 
     public boolean tieneBateriaSuficiente(DroneAcuatico drone) {
         if (drone == null) return false;
-        return drone.bateria() >= 35;
+        return drone.getBateria() >= 35;
     }
 
     public void validarPuntoLlegada(String puntoLlegada) {
