@@ -17,3 +17,42 @@ No se utilizaron anotaciones `@SuppressWarnings`. La deuda técnica ha sido miti
 - 🔴 Bugs: 0
 - 🟠 Vulnerabilities: 0
 - 🟡 Code Smells: 0
+
+---
+
+## Anexo: ¿Cómo desplegar SonarQube Localmente?
+
+Si deseas levantar tu propio servidor de SonarQube y visualizar el dashboard en tu máquina, la forma más limpia y profesional de hacerlo es utilizando **Docker**. Sigue estos pasos:
+
+### Paso 1: Levantar el Servidor (Docker)
+Abre tu terminal y ejecuta el siguiente comando para descargar e iniciar la imagen oficial de SonarQube Community LTS:
+```bash
+docker run -d --name sonarqube -p 9000:9000 sonarqube:lts-community
+```
+*Nota: Puede tardar unos minutos en arrancar.*
+
+### Paso 2: Acceder al Dashboard
+1. Abre tu navegador web y ve a `http://localhost:9000`.
+2. Inicia sesión con las credenciales por defecto:
+   - **Usuario:** `admin`
+   - **Contraseña:** `admin`
+3. El sistema te pedirá que cambies la contraseña por seguridad.
+
+### Paso 3: Configurar el Proyecto en SonarQube
+1. Una vez dentro, haz clic en **"Create a local project"**.
+2. Asigna un `Project Key` (ejemplo: `aquaport-mvp`) y un `Display Name`.
+3. Selecciona la opción para analizar el código **"Locally"**.
+4. SonarQube te pedirá generar un **Token de autenticación**. Genéralo, cópialo y guárdalo, ya que no volverá a mostrarse.
+
+### Paso 4: Ejecutar el Análisis desde Maven
+Ve a la raíz de tu proyecto (donde está el `pom.xml`) y ejecuta el siguiente comando reemplazando `TU_TOKEN` por el token que acabas de copiar:
+
+```bash
+mvn clean verify sonar:sonar \
+  -Dsonar.projectKey=aquaport-mvp \
+  -Dsonar.host.url=http://localhost:9000 \
+  -Dsonar.login=TU_TOKEN
+```
+
+### Paso 5: Ver Resultados
+Vuelve a tu navegador (`http://localhost:9000`). Verás tu proyecto `aquaport-mvp` en el dashboard principal mostrando las métricas exactas (Bugs, Vulnerabilities, Code Smells, Coverage) con una interfaz gráfica detallada.
