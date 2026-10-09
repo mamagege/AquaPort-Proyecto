@@ -3,42 +3,71 @@ import java.util.List;
 import java.util.Optional;
 
 public class AsignadorAutomatico {
-    private EstrategiaAsignacion estrategia;
-    private final List<DroneObserver> observadores = new ArrayList<>();
+    private final EstrategiaSeleccion estrategia;
+    private final List<ObservadorMision> observadores = new ArrayList<>();
+    private final List<DroneAcuatico> flotaActiva = new ArrayList<>();
 
-    public AsignadorAutomatico(EstrategiaAsignacion estrategia) {
+    public AsignadorAutomatico(EstrategiaSeleccion estrategia) {
         this.estrategia = estrategia;
     }
 
-    public void setEstrategia(EstrategiaAsignacion estrategia) {
-        this.estrategia = estrategia;
+    public void setFlota(List<DroneAcuatico> flota) {
+        this.flotaActiva.clear();
+        this.flotaActiva.addAll(flota);
     }
 
-    public void addObserver(DroneObserver observer) {
-        observadores.add(observer);
+    public void registrarObservador(ObservadorMision observador) {
+        observadores.add(observador);
     }
 
-    public void removeObserver(DroneObserver observer) {
-        observadores.remove(observer);
+    public void removerObservador(ObservadorMision observador) {
+        observadores.remove(observador);
     }
 
-    public Optional<DroneAcuatico> seleccionarDrone(List<DroneAcuatico> flota) {
-        // Delegamos la selección a la estrategia inyectada
-        return estrategia.seleccionar(flota);
-    }
-
-    public void registrarMision(Mision mision) {
-        DroneAcuatico drone = mision.getDrone();
-        if (drone != null && drone.getEstado() == EstadoDrone.FALLO) {
-            notificarFallo(drone);
-            throw new IllegalStateException("No se puede registrar la misión: El drone asignado está en FALLO.");
+    public Optional<DroneAcuatico> asignar(Mision mision) {
+        if (flotaActiva.isEmpty()) {
+            notificarFalloAsignacion(mision);
+            return Optional.empty();
         }
-        // Lógica normal de registro de misión
-        System.out.println("Misión " + mision.getId() + " registrada exitosamente con drone " + drone.getId());
+
+        // Simular intento de asignación (incluso buscando alternativo)
+        Optional<DroneAcuatico> candidatoOpt = estrategia.seleccionar(flotaActiva, mision);
+        
+        while (candidatoOpt.isPresent()) {
+            DroneAcuatico drone = candidatoOpt.get();
+            
+            // Validar batería umbral (35%) y que esté disponible
+            if (!drone.disponible() || drone.getBateria() < 35) {
+                // Si está en FALLO
+                if (drone.getEstado() == EstadoDrone.FALLO) {
+                    notificarDroneFallo(drone);
+                }
+                
+                // Lo retiramos de los elegibles para buscar el siguiente alternativo
+                flotaActiva.remove(drone);
+                candidatoOpt = estrategia.seleccionar(flotaActiva, mision);
+            } else {
+                // Happy path
+                System.out.println("Drone " + drone.getId() + " asignado exitosamente.");
+                return Optional.of(drone);
+            }
+        }
+
+        // Si la lista se agotó y no hubo candidato apto
+        if (mision.getPrioridad() == Prioridad.CRITICA) {
+            notificarFalloAsignacion(mision);
+        }
+        return Optional.empty();
     }
 
-    private void notificarFallo(DroneAcuatico drone) {
-        for (DroneObserver observer : observadores) {
+    private void notificarFalloAsignacion(Mision mision) {
+        for (ObservadorMision observer : observadores) {
+            observer.notificarFalloAsignacion(mision);
+        }
+    }
+
+    private void notificarDroneFallo(DroneAcuatico drone) {
+        for (ObservadorMision observer : observadores) {
             observer.onDroneFallo(drone);
         }
     }
