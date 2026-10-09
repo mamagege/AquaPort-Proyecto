@@ -36,9 +36,6 @@
                             <rules>
                                 <rule>
                                     <element>CLASS</element>
-                                    <includes>
-                                        <include>*AsignadorAutomatico</include>
-                                    </includes>
                                     <limits>
                                         <limit>
                                             <counter>LINE</counter>
