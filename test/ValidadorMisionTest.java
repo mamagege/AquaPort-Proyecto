@@ -1,0 +1,52 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import static org.junit.jupiter.api.Assertions.*;
+
+class ValidadorMisionTest {
+    private ValidadorMision v;
+
+    @BeforeEach
+    void setUp() {
+        v = new ValidadorMision();
+    }
+
+    @Test
+    @DisplayName("Drone con batería >= 35% puede ser asignado")
+    void droneBateriaSuficiente_puedeAsignarse() {
+        DroneAcuatico d = new DroneAcuatico("AR-01", "Aqua-Ranger 100", 85, true, "Embalse Norte");
+        assertTrue(v.tieneBateriaSuficiente(d));
+    }
+
+    @Test
+    @DisplayName("Drone con batería < 35% NO puede ser asignado")
+    void droneBateriaCritica_noAsignable() {
+        DroneAcuatico d = new DroneAcuatico("AR-03", "Aqua-Ranger 100", 18, false, "Laguna Sur");
+        assertFalse(v.tieneBateriaSuficiente(d));
+    }
+
+    @Test
+    @DisplayName("Punto de llegada nulo lanza IllegalArgumentException")
+    void puntoLlegadaNulo_lanzaExcepcion() {
+        assertThrows(IllegalArgumentException.class, () -> v.validarPuntoLlegada(null));
+    }
+
+    @Test
+    @DisplayName("Punto de llegada vacío lanza IllegalArgumentException")
+    void puntoLlegadaVacio_lanzaExcepcion() {
+        assertThrows(IllegalArgumentException.class, () -> v.validarPuntoLlegada("   "));
+    }
+
+    @Test
+    @DisplayName("Drone no disponible (disponible=false) lanza IllegalStateException")
+    void droneNoDisponible_lanzaExcepcion() {
+        DroneAcuatico d = new DroneAcuatico("AR-04", "Aqua-Ranger 100", 100, false, "Embalse Sur");
+        assertThrows(IllegalStateException.class, () -> v.validarDisponibilidad(d));
+    }
+
+    @Test
+    @DisplayName("Zona de destino restringida lanza IllegalArgumentException")
+    void zonaDestinoInvalida_lanzaExcepcion() {
+        assertThrows(IllegalArgumentException.class, () -> v.validarPuntoLlegada("Zona Restringida"));
+    }
+}
