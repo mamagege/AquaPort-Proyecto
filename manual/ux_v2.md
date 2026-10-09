@@ -25,13 +25,13 @@ La Tarjeta de Drone Acuático es el microcomponente más crítico del dashboard.
 A continuación se presenta el flujo completo de 3 pantallas interactuando con la nueva flota.
 
 ### Pantalla 1: Panel de Flota (Dashboard Principal)
-![Panel de Flota v2](/C:/Users/USUARIO/.gemini/antigravity-ide/brain/ff8df70b-9af7-417b-b8a6-c617d3976d76/panel_flota_v2_1791575794658.jpg)
+![Panel de Flota v2](img/panel_flota_v2.jpg)
 
 ### Pantalla 2: Detalle de Misión (Evaluación de Asignación)
-![Detalle de Mision v2](/C:/Users/USUARIO/.gemini/antigravity-ide/brain/ff8df70b-9af7-417b-b8a6-c617d3976d76/detalle_mision_v2_1791575803995.jpg)
+![Detalle de Mision v2](img/detalle_mision_v2.jpg)
 
 ### Pantalla 3: Confirmación de Despliegue
-![Confirmacion v2](/C:/Users/USUARIO/.gemini/antigravity-ide/brain/ff8df70b-9af7-417b-b8a6-c617d3976d76/confirmacion_v2_1791575827065.jpg)
+![Confirmacion v2](img/confirmacion_v2.jpg)
 
 ---
 
