@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NotificadorOperador.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">aquaport</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">NotificadorOperador.java</span></div><h1>NotificadorOperador.java</h1><pre class="source lang-java linenums">import java.util.logging.Logger;
+import java.util.logging.Level;
+
+/**
+ * Clase NotificadorOperador.
+ * 
+ * Función: Enviar mensajes, alertas y reportes al operador del sistema.
+ * ¿Qué es?: Un componente de salida de información (Output Port).
+ * ¿Para qué sirve?: Muestra información relevante, éxitos o errores sobre el estado 
+ * de las operaciones al usuario final u operador del programa.
+ * 
+ * Principios SOLID aplicados:
+ * - SRP (Responsabilidad Única): Su única razón para cambiar es si se modifica 
+ *   el medio o el formato en el que se notifican los mensajes. Si el día de mañana 
+ *   se pasa de imprimir en consola a enviar un Email o un SMS, solo se modificará esta clase.
+ */
+<span class="fc" id="L17">public class NotificadorOperador {</span>
+<span class="fc" id="L18">    private static final Logger LOGGER = Logger.getLogger(NotificadorOperador.class.getName());</span>
+
+    public void notificarExito(String mensaje) {
+<span class="pc bpc" id="L21" title="1 of 2 branches missed.">        if (LOGGER.isLoggable(Level.INFO)) {</span>
+<span class="fc" id="L22">            LOGGER.info(String.format(&quot;✅ [OPERADOR] %s&quot;, mensaje));</span>
+        }
+<span class="fc" id="L24">    }</span>
+    
+    public void notificarError(String mensaje) {
+<span class="pc bpc" id="L27" title="1 of 2 branches missed.">        if (LOGGER.isLoggable(Level.SEVERE)) {</span>
+<span class="fc" id="L28">            LOGGER.severe(String.format(&quot;🛑 [OPERADOR ERROR] %s&quot;, mensaje));</span>
+        }
+<span class="fc" id="L30">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EmpoleonStreams.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">aquaport</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">EmpoleonStreams.java</span></div><h1>EmpoleonStreams.java</h1><pre class="source lang-java linenums">import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Comparator;
+import java.util.stream.Collectors;
+import java.util.stream.Collector;
+
+<span class="nc" id="L8">public class EmpoleonStreams {</span>
+
+    // 1. Calcular la eficiencia de cada zona (misiones completadas / misiones totales)
+    public static Map&lt;String, Double&gt; calcularEficienciaPorZona(List&lt;Mision&gt; misiones) {
+<span class="fc" id="L12">        return misiones.stream()</span>
+<span class="fc" id="L13">            .collect(Collectors.groupingBy(</span>
+                Mision::getPuntoPartida, // Suponiendo que la eficiencia se mide por zona de origen
+<span class="fc" id="L15">                Collectors.collectingAndThen(</span>
+<span class="fc" id="L16">                    Collectors.toList(),</span>
+                    lista -&gt; {
+<span class="fc" id="L18">                        long total = lista.size();</span>
+<span class="fc" id="L19">                        long completadas = lista.stream()</span>
+<span class="fc bfc" id="L20" title="All 2 branches covered.">                            .filter(m -&gt; m.getEstado() == EstadoMision.COMPLETADA)</span>
+<span class="fc" id="L21">                            .count();</span>
+<span class="pc bpc" id="L22" title="1 of 2 branches missed.">                        return total == 0 ? 0.0 : (double) completadas / total;</span>
+                    }
+                )
+            ));
+    }
+
+    // 2. Encontrar el drone con el mejor historial de entregas exitosas
+    public static Optional&lt;DroneAcuatico&gt; droneMasExitoso(List&lt;DroneAcuatico&gt; flota) {
+        // Al tratarse de un simple máximo en una colección que no superará los miles de elementos,
+        // usar parallelStream() generaría más overhead en la coordinación de hilos que ganancia en tiempo real.
+        // Se usa stream secuencial por eficiencia.
+<span class="fc" id="L33">        return flota.stream()</span>
+<span class="fc" id="L34">            .max(Comparator.comparingInt(DroneAcuatico::getEntregasExitosas));</span>
+    }
+
+    // 3. Planificar la ruta óptima seleccionando el drone disponible más cercano (mayor batería en esta zona simulada)
+    public static List&lt;DroneAcuatico&gt; planificarRutaOptima(List&lt;Waypoint&gt; ruta, List&lt;DroneAcuatico&gt; flota) {
+        // Por cada waypoint intermedio (tramo), buscar el drone de esa zona que esté disponible y tenga mayor batería.
+        // Si hay una gran cantidad de waypoints y drones, y la búsqueda requiere cálculos de distancia pesados,
+        // aquí sí justificaría un parallelStream() en las zonas para paralelizar la búsqueda del drone óptimo.
+<span class="fc" id="L42">        return ruta.stream()</span>
+<span class="fc" id="L43">            .map(wp -&gt; flota.stream()</span>
+<span class="fc bfc" id="L44" title="All 4 branches covered.">                .filter(d -&gt; d.disponible() &amp;&amp; d.getZona().equals(wp.getZona()))</span>
+<span class="fc" id="L45">                .max(Comparator.comparingInt(DroneAcuatico::getBateria))</span>
+<span class="fc" id="L46">                .orElseThrow(() -&gt; new IllegalStateException(&quot;No hay drones disponibles para el waypoint en &quot; + wp.getZona()))</span>
+            )
+<span class="fc" id="L48">            .collect(Collectors.toList());</span>
+    }
+
+    // 4. Collector personalizado que agrupe drones por zona y calcule la batería promedio por zona en una sola pasada
+    public static Map&lt;String, Double&gt; bateriaPromedioPorZonaCustom(List&lt;DroneAcuatico&gt; flota) {
+<span class="fc" id="L53">        return flota.stream()</span>
+<span class="fc" id="L54">            .collect(Collectors.groupingBy(</span>
+                DroneAcuatico::getZona,
+<span class="fc" id="L56">                Collector.of(</span>
+<span class="fc" id="L57">                    () -&gt; new double[2], // [0] = suma, [1] = cantidad</span>
+<span class="fc" id="L58">                    (acc, d) -&gt; { acc[0] += d.getBateria(); acc[1]++; },</span>
+<span class="nc" id="L59">                    (acc1, acc2) -&gt; { acc1[0] += acc2[0]; acc1[1] += acc2[1]; return acc1; },</span>
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">                    acc -&gt; acc[1] == 0 ? 0.0 : acc[0] / acc[1]</span>
+                )
+            ));
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

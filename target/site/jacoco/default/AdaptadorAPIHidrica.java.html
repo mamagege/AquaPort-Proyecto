@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AdaptadorAPIHidrica.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">aquaport</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">AdaptadorAPIHidrica.java</span></div><h1>AdaptadorAPIHidrica.java</h1><pre class="source lang-java linenums">public class AdaptadorAPIHidrica implements ProveedorCondiciones {
+    private final APIHidricaExterna api;
+
+<span class="fc" id="L4">    public AdaptadorAPIHidrica(APIHidricaExterna api) {</span>
+<span class="fc" id="L5">        this.api = api;</span>
+<span class="fc" id="L6">    }</span>
+
+    public CondicionesHidricas consultarCondiciones(String zona) {
+<span class="fc" id="L9">        String json = api.obtenerDatosZona(zona);</span>
+        // Simulacion de parseo JSON muy simple y robusta
+        try {
+<span class="fc" id="L12">            double waterLevel = extraerValor(json, &quot;waterLevel&quot;);</span>
+<span class="fc" id="L13">            double turbidity = extraerValor(json, &quot;turbidity&quot;);</span>
+<span class="fc" id="L14">            return new CondicionesHidricas(waterLevel, turbidity);</span>
+<span class="nc" id="L15">        } catch (Exception e) {</span>
+            // Manejo de errores de adaptacion devolviendo condiciones seguras por defecto
+<span class="nc" id="L17">            return new CondicionesHidricas(0, 0);</span>
+        }
+    }
+
+    private double extraerValor(String json, String key) {
+        // Busca '&quot;key&quot;: valor'
+<span class="fc" id="L23">        String searchKey = &quot;\&quot;&quot; + key + &quot;\&quot;:&quot;;</span>
+<span class="fc" id="L24">        int index = json.indexOf(searchKey);</span>
+<span class="fc bfc" id="L25" title="All 2 branches covered.">        if (index == -1) return 0;</span>
+        
+<span class="fc" id="L27">        int start = index + searchKey.length();</span>
+<span class="fc" id="L28">        int end = json.indexOf(&quot;,&quot;, start);</span>
+<span class="fc bfc" id="L29" title="All 2 branches covered.">        if (end == -1) {</span>
+<span class="fc" id="L30">            end = json.indexOf(&quot;}&quot;, start);</span>
+        }
+<span class="pc bpc" id="L32" title="1 of 2 branches missed.">        if (end == -1) return 0;</span>
+        
+<span class="fc" id="L34">        String valorStr = json.substring(start, end).trim();</span>
+<span class="fc" id="L35">        return Double.parseDouble(valorStr);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -28,6 +28,7 @@ public abstract class DroneAcuatico {
     public void setEstado(EstadoDrone estado) { this.estado = estado; }
     public void setBateria(int bateria) { this.bateria = bateria; }
     public void incrementarEntregas() { this.entregasExitosas++; }
+    public void registrarTelemetria() { /* Base no hace nada especial */ }
 
     public boolean disponible() {
         return estado == EstadoDrone.DISPONIBLE;

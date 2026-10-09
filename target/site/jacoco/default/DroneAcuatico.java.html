@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DroneAcuatico.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">aquaport</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">DroneAcuatico.java</span></div><h1>DroneAcuatico.java</h1><pre class="source lang-java linenums">public abstract class DroneAcuatico {
+    private final String id;
+    private final String modelo;
+    private int bateria;
+    private EstadoDrone estado;
+    private final String zona;
+    private final double capacidadCargaMax;
+    private int entregasExitosas; // Para la v3
+
+<span class="fc" id="L10">    public DroneAcuatico(String id, String modelo, int bateria, EstadoDrone estado, String zona, double capacidadCargaMax) {</span>
+<span class="fc" id="L11">        this.id = id;</span>
+<span class="fc" id="L12">        this.modelo = modelo;</span>
+<span class="fc" id="L13">        this.bateria = bateria;</span>
+<span class="fc" id="L14">        this.estado = estado;</span>
+<span class="fc" id="L15">        this.zona = zona;</span>
+<span class="fc" id="L16">        this.capacidadCargaMax = capacidadCargaMax;</span>
+<span class="fc" id="L17">        this.entregasExitosas = 0;</span>
+<span class="fc" id="L18">    }</span>
+
+<span class="fc" id="L20">    public String getId() { return id; }</span>
+<span class="fc" id="L21">    public String getModelo() { return modelo; }</span>
+<span class="fc" id="L22">    public int getBateria() { return bateria; }</span>
+<span class="fc" id="L23">    public EstadoDrone getEstado() { return estado; }</span>
+<span class="fc" id="L24">    public String getZona() { return zona; }</span>
+<span class="fc" id="L25">    public double getCapacidadCargaMax() { return capacidadCargaMax; }</span>
+<span class="fc" id="L26">    public int getEntregasExitosas() { return entregasExitosas; }</span>
+    
+<span class="fc" id="L28">    public void setEstado(EstadoDrone estado) { this.estado = estado; }</span>
+<span class="nc" id="L29">    public void setBateria(int bateria) { this.bateria = bateria; }</span>
+<span class="fc" id="L30">    public void incrementarEntregas() { this.entregasExitosas++; }</span>
+<span class="fc" id="L31">    public void registrarTelemetria() { /* Base no hace nada especial */ }</span>
+
+    public boolean disponible() {
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        return estado == EstadoDrone.DISPONIBLE;</span>
+    }
+
+    // Abstract method to be implemented by subclasses
+    public abstract String getTipo();
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

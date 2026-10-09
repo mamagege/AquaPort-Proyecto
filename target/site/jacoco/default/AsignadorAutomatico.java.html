@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AsignadorAutomatico.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">aquaport</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">AsignadorAutomatico.java</span></div><h1>AsignadorAutomatico.java</h1><pre class="source lang-java linenums">import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+public class AsignadorAutomatico {
+    private final EstrategiaSeleccion estrategia;
+<span class="fc" id="L7">    private final List&lt;ObservadorMision&gt; observadores = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L8">    private final List&lt;DroneAcuatico&gt; flotaActiva = new ArrayList&lt;&gt;();</span>
+
+<span class="fc" id="L10">    public AsignadorAutomatico(EstrategiaSeleccion estrategia) {</span>
+<span class="fc" id="L11">        this.estrategia = estrategia;</span>
+<span class="fc" id="L12">    }</span>
+
+    public void setFlota(List&lt;DroneAcuatico&gt; flota) {
+<span class="fc" id="L15">        this.flotaActiva.clear();</span>
+<span class="fc" id="L16">        this.flotaActiva.addAll(flota);</span>
+<span class="fc" id="L17">    }</span>
+
+    public void registrarObservador(ObservadorMision observador) {
+<span class="fc" id="L20">        observadores.add(observador);</span>
+<span class="fc" id="L21">    }</span>
+
+    public void removerObservador(ObservadorMision observador) {
+<span class="nc" id="L24">        observadores.remove(observador);</span>
+<span class="nc" id="L25">    }</span>
+
+    public Optional&lt;DroneAcuatico&gt; asignar(Mision mision) {
+<span class="fc bfc" id="L28" title="All 2 branches covered.">        if (flotaActiva.isEmpty()) {</span>
+<span class="fc" id="L29">            notificarFalloAsignacion(mision);</span>
+<span class="fc" id="L30">            return Optional.empty();</span>
+        }
+
+        // Simular intento de asignación (incluso buscando alternativo)
+<span class="fc" id="L34">        Optional&lt;DroneAcuatico&gt; candidatoOpt = estrategia.seleccionar(flotaActiva, mision);</span>
+        
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        while (candidatoOpt.isPresent()) {</span>
+<span class="fc" id="L37">            DroneAcuatico drone = candidatoOpt.get();</span>
+            
+            // Validar batería umbral (35%) y que esté disponible
+<span class="fc bfc" id="L40" title="All 4 branches covered.">            if (!drone.disponible() || drone.getBateria() &lt; 35) {</span>
+                // Si está en FALLO
+<span class="fc bfc" id="L42" title="All 2 branches covered.">                if (drone.getEstado() == EstadoDrone.FALLO) {</span>
+<span class="fc" id="L43">                    notificarDroneFallo(drone);</span>
+                }
+                
+                // Lo retiramos de los elegibles para buscar el siguiente alternativo
+<span class="fc" id="L47">                flotaActiva.remove(drone);</span>
+<span class="fc" id="L48">                candidatoOpt = estrategia.seleccionar(flotaActiva, mision);</span>
+            } else {
+                // Happy path
+<span class="fc" id="L51">                System.out.println(&quot;Drone &quot; + drone.getId() + &quot; asignado exitosamente.&quot;);</span>
+<span class="fc" id="L52">                return Optional.of(drone);</span>
+            }
+<span class="fc" id="L54">        }</span>
+
+        // Si la lista se agotó y no hubo candidato apto
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        if (mision.getPrioridad() == Prioridad.CRITICA) {</span>
+<span class="fc" id="L58">            notificarFalloAsignacion(mision);</span>
+        }
+<span class="fc" id="L60">        return Optional.empty();</span>
+    }
+
+    private void notificarFalloAsignacion(Mision mision) {
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        for (ObservadorMision observer : observadores) {</span>
+<span class="fc" id="L65">            observer.notificarFalloAsignacion(mision);</span>
+<span class="fc" id="L66">        }</span>
+<span class="fc" id="L67">    }</span>
+
+    private void notificarDroneFallo(DroneAcuatico drone) {
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        for (ObservadorMision observer : observadores) {</span>
+<span class="fc" id="L71">            observer.onDroneFallo(drone);</span>
+<span class="fc" id="L72">        }</span>
+<span class="fc" id="L73">    }</span>
+
+    public Mision asignarMultiEtapa(String origen, String destino, TipoCarga carga) throws FalloDroneException, BateriaCriticaException {
+        // En un caso real, busca un drone y lo asigna.
+<span class="nc" id="L77">        return null;</span>
+    }
+
+    public boolean isZonaActiva(String zona) {
+<span class="nc" id="L81">        return true;</span>
+    }
+
+    public void reasignarDrone(String zona) {
+<span class="nc" id="L85">    }</span>
+
+    public void validarCustodia(Mision mision) throws CustodiaInterrumpidaException {
+<span class="fc" id="L88">    }</span>
+
+    public void retornarABase(String zona) {
+<span class="nc" id="L91">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

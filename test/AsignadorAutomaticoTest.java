@@ -100,12 +100,72 @@ class AsignadorAutomaticoTest {
         DroneAcuatico droneUmbral = DroneFactory.crearDrone("SUPERFICIAL", "A-01", "Model", 35, EstadoDrone.DISPONIBLE, "Z1");
         
         asignador.setFlota(List.of(droneUmbral));
-        when(estrategiaMock.seleccionar(any(), eq(mision))).thenReturn(Optional.of(droneUmbral));
+        when(estrategiaMock.seleccionar(anyList(), eq(mision))).thenReturn(Optional.of(droneUmbral));
         
         Optional<DroneAcuatico> resultado = asignador.asignar(mision);
         
         assertTrue(resultado.isPresent());
         assertEquals(droneUmbral, resultado.get());
         verify(observadorMock, never()).notificarFalloAsignacion(any());
+    }
+
+    @Test
+    @DisplayName("Drone con batería inferior a 35% es descartado pero no notifica fallo técnico")
+    void droneConBateriaBaja_esDescartado() {
+        Mision mision = mock(Mision.class);
+        // Disponible pero batería insuficiente
+        DroneAcuatico droneDescargado = DroneFactory.crearDrone("SUPERFICIAL", "A-BATT", "Model", 34, EstadoDrone.DISPONIBLE, "Z1");
+        
+        asignador.setFlota(List.of(droneDescargado));
+        
+        when(estrategiaMock.seleccionar(anyList(), eq(mision)))
+            .thenReturn(Optional.of(droneDescargado))
+            .thenReturn(Optional.empty()); // Segundo intento falla
+            
+        asignador.registrarObservador(observadorMock);
+        
+        Optional<DroneAcuatico> resultado = asignador.asignar(mision);
+        
+        assertFalse(resultado.isPresent());
+        verify(observadorMock, never()).onDroneFallo(any());
+    }
+
+    @Test
+    @DisplayName("Drone ocupado (no disponible pero sin FALLO) es descartado sin notificar fallo técnico")
+    void droneOcupadoNoNotificaFallo() {
+        Mision mision = mock(Mision.class);
+        DroneAcuatico droneOcupado = DroneFactory.crearDrone("SUPERFICIAL", "A-OCUPADO", "Model", 100, EstadoDrone.EN_MISION, "Z1");
+        
+        asignador.setFlota(List.of(droneOcupado));
+        
+        when(estrategiaMock.seleccionar(anyList(), eq(mision)))
+            .thenReturn(Optional.of(droneOcupado))
+            .thenReturn(Optional.empty()); // Segundo intento falla
+            
+        asignador.registrarObservador(observadorMock);
+        
+        Optional<DroneAcuatico> resultado = asignador.asignar(mision);
+        
+        assertFalse(resultado.isPresent());
+        verify(observadorMock, never()).onDroneFallo(any());
+    }
+
+    @Test
+    @DisplayName("Misión NORMAL sin drones no notifica fallo crítico global")
+    void misionNormalSinDrones_noNotifica() {
+        Mision mision = mock(Mision.class);
+        when(mision.getPrioridad()).thenReturn(Prioridad.NORMAL);
+        DroneAcuatico droneOcupado = DroneFactory.crearDrone("SUPERFICIAL", "A-01", "Model", 100, EstadoDrone.EN_MISION, "Z1");
+        
+        asignador.setFlota(List.of(droneOcupado));
+        when(estrategiaMock.seleccionar(anyList(), eq(mision))).thenReturn(Optional.empty());
+        asignador.registrarObservador(observadorMock);
+        
+        Optional<DroneAcuatico> resultado = asignador.asignar(mision);
+        
+        assertFalse(resultado.isPresent());
+        // Como no es crítica, no dispara la notificación global de fallo de asignación al quedarse sin opciones (excepto si estuviera vacía la flota original)
+        // Wait, AsignadorAutomatico sólo llama notificarFalloAsignacion si getPrioridad() == CRITICA
+        verify(observadorMock, never()).notificarFalloAsignacion(mision);
     }
 }

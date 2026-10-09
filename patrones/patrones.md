@@ -1,39 +1,27 @@
-# Reto Prinplup: Patrones de Diseño v2
+# Reto Empoleon: Integración de Patrones de Diseño GOF
 
-En AquaPort v2, abandonamos los largos `if/else` y las dependencias acopladas para dar paso a un diseño elegante basado en tres Patrones de Diseño clave (GoF).
+En la escala Enterprise (v3), un sistema rígido fracasa rápido. Hemos inyectado dinamismo a AquaPort adoptando **3 Patrones de Diseño Estructurales y de Comportamiento** que interactúan de forma limpia, cumpliendo los principios SOLID.
 
----
+## 1. Chain of Responsibility (Cadena de Responsabilidad)
+La asignación de misiones antes dependía de un bloque denso de `if/else`. Ahora, implementamos una canalización (pipeline) donde la solicitud viaja a través de distintos eslabones validadores. Si uno falla, la cadena se rompe de forma controlada (Early Exit), ahorrando cómputo.
 
-## 1. Strategy
-**¿Qué hace?**
-Permite definir una familia de algoritmos, encapsular cada uno y hacerlos intercambiables en tiempo de ejecución. Permite que el algoritmo varíe independientemente de los clientes que lo utilizan.
+- **Componentes:** `ValidadorCadena` (Abstracto), `ValidadorBateria`, `ValidadorCapacidadCarga`, `ValidadorZonaActiva` y `ValidadorCondicionesHidricas`.
+- **Ventaja Enterprise:** Si en el futuro llega un "ValidadorDeSeguros", simplemente se añade con `.setSiguiente(nuevoValidador)` sin alterar ni una línea del asignador principal (Open/Closed Principle).
+- **Pruebas (Mockito):** Comprobamos mediante `verify(valCarga, never()).validar(...)` que, cuando la batería falla, el pipeline aborta, previniendo que los eslabones siguientes se ejecuten.
 
-**¿Por qué y cómo se implementó?**
-Se implementó porque la lógica para elegir qué drone asignar puede variar según el contexto operativo (necesitar el de más batería, el más cercano, o el de mayor carga para misiones críticas).
-- **Interfaz:** `EstrategiaAsignacion` define el contrato `seleccionar(List<DroneAcuatico> disponibles)`.
-- **Estrategias (Algoritmos):** `MayorBateriaStrategy`, `ZonaCercanaStrategy`, `PrioridadCriticaStrategy`.
-- **Contexto:** `AsignadorAutomatico` tiene un atributo de tipo `EstrategiaAsignacion` y delega la selección. Así, no tenemos un `if (estrategia instanceof...)` (lo cual sería un antipatrón), simplemente llamamos a `estrategia.seleccionar(flota)`.
+## 2. Decorator (Decorador)
+Queríamos agregar Telemetría y Cifrado Militar a los drones. Si usamos herencia clásica, tendríamos la explosión de clases: `DroneBuceadorConCifrado`, `DroneBuceadorConTelemetria`, `DroneBuceadorConAmbas`, etc.
 
----
+- **Solución:** Creamos `DroneDecorator` que envuelve al `DroneAcuatico` base.
+- **Componentes:** `DroneConMonitoreo` y `DroneConCifrado`.
+- **Implementación:** `DroneConCifrado(DroneConMonitoreo(droneBase))`. Cada capa añade su lógica (`cifradoActivo = true`) antes o después de delegar (`super.registrarTelemetria()`).
+- **Ventaja Enterprise:** Dinámicamente en tiempo de ejecución, a un Drone "le ponemos la mochila" de Telemetría sin tocar el código fuente del drone.
 
-## 2. Observer
-**¿Qué hace?**
-Define una dependencia uno-a-muchos entre objetos, de manera que cuando uno cambia su estado, todos sus dependientes son notificados y actualizados automáticamente.
+## 3. Adapter (Adaptador)
+El Centro Meteorológico nos entregaba datos crudos, en inglés y en formato JSON (`{"waterLevel": 85.5, "turbidity": 12.0}`). Que nuestro núcleo de dominio sepa "qué es un JSON" violaba la Clean Architecture (Ports & Adapters).
 
-**¿Por qué y cómo se implementó?**
-Se implementó para la gestión de alertas, ya que diferentes partes del sistema necesitan reaccionar cuando un drone falla, sin que la clase del drone deba conocer a estos interesados.
-- **Sujeto Observable:** `AsignadorAutomatico` mantiene una lista interna de `observadores` (`List<DroneObserver>`). Si un drone en `FALLO` intenta asignarse (o reporta fallo), itera sobre la lista y llama a `onDroneFallo()`.
-- **Interfaz Observer:** `DroneObserver`.
-- **Observadores (Listeners):** `CentroControlObserver` y `TecnicoMantenimientoObserver`. Se pueden suscribir/desuscribir en tiempo de ejecución.
+- **Solución:** `AdaptadorAPIHidrica` actúa como un enchufe o traductor.
+- **Componentes:** Implementa (o inyecta) el proveedor `APIHidricaExterna` y retorna nuestro modelo puro `CondicionesHidricas` (`nivelAgua` y `turbidez`).
+- **Pruebas (Mockito):** Mockeamos la respuesta límite del API para simular lecturas crudas. El Adaptador las convierte y el Validador de la Cadena evalúa las reglas de negocio sobre el objeto adaptado.
 
----
-
-## 3. Factory Method
-**¿Qué hace?**
-Define una interfaz para crear un objeto, pero deja que las subclases decidan qué clase instanciar. Delega la creación de instancias a subclases/métodos especializados.
-
-**¿Por qué y cómo se implementó?**
-Se implementó porque ahora AquaPort v2 maneja múltiples modelos de drones (`Superficial`, `Semisumergido`, `Buceador`) que heredan de una misma abstracción base.
-- **Abstracción Base:** `DroneAcuatico` (convertido de `record` a `abstract class`).
-- **Creador:** `DroneFactory`, que evalúa un `String tipo` (o Enum) y retorna la subclase específica ya configurada con sus límites de carga (`capacidadCargaMax`).
-- De esta forma, si la Universidad compra un cuarto tipo de drone mañana, la lógica central de AquaPort permanece intacta, solo se añade el caso en el Factory.
+*(Todas las implementaciones incluyen cobertura total avalada por JaCoCo).*

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Mision.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">aquaport</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Mision.java</span></div><h1>Mision.java</h1><pre class="source lang-java linenums">public class Mision {
+    private final String id;
+    private final DroneAcuatico drone;
+    private final String puntoPartida;
+    private final String puntoLlegada;
+    private final TipoCarga tipoCarga;
+    private EstadoMision estado;
+    private final Prioridad prioridad;
+    private final java.util.List&lt;Waypoint&gt; waypoints; // Para la v3
+
+<span class="fc" id="L11">    private Mision(Builder builder) {</span>
+<span class="fc" id="L12">        this.id = builder.id;</span>
+<span class="fc" id="L13">        this.drone = builder.drone;</span>
+<span class="fc" id="L14">        this.puntoPartida = builder.puntoPartida;</span>
+<span class="fc" id="L15">        this.puntoLlegada = builder.puntoLlegada;</span>
+<span class="fc" id="L16">        this.tipoCarga = builder.tipoCarga;</span>
+<span class="fc" id="L17">        this.estado = builder.estado;</span>
+<span class="fc" id="L18">        this.prioridad = builder.prioridad;</span>
+<span class="pc bpc" id="L19" title="1 of 2 branches missed.">        this.waypoints = builder.waypoints != null ? builder.waypoints : new java.util.ArrayList&lt;&gt;();</span>
+<span class="fc" id="L20">    }</span>
+
+<span class="fc" id="L22">    public String getId() { return id; }</span>
+<span class="fc" id="L23">    public DroneAcuatico getDrone() { return drone; }</span>
+<span class="fc" id="L24">    public String getPuntoPartida() { return puntoPartida; }</span>
+<span class="fc" id="L25">    public String getPuntoLlegada() { return puntoLlegada; }</span>
+<span class="fc" id="L26">    public TipoCarga getTipoCarga() { return tipoCarga; }</span>
+<span class="fc" id="L27">    public EstadoMision getEstado() { return estado; }</span>
+<span class="fc" id="L28">    public Prioridad getPrioridad() { return prioridad; }</span>
+<span class="fc" id="L29">    public java.util.List&lt;Waypoint&gt; getWaypoints() { return waypoints; }</span>
+    
+<span class="nc" id="L31">    public void setEstado(EstadoMision estado) { this.estado = estado; }</span>
+
+<span class="fc" id="L33">    public static class Builder {</span>
+        private String id;
+        private DroneAcuatico drone;
+        private String puntoPartida;
+        private String puntoLlegada;
+        private TipoCarga tipoCarga;
+<span class="fc" id="L39">        private EstadoMision estado = EstadoMision.PENDIENTE;</span>
+<span class="fc" id="L40">        private Prioridad prioridad = Prioridad.NORMAL;</span>
+<span class="fc" id="L41">        private java.util.List&lt;Waypoint&gt; waypoints = new java.util.ArrayList&lt;&gt;();</span>
+
+        public Builder id(String id) {
+<span class="fc" id="L44">            this.id = id;</span>
+<span class="fc" id="L45">            return this;</span>
+        }
+
+        public Builder drone(DroneAcuatico drone) {
+<span class="fc" id="L49">            this.drone = drone;</span>
+<span class="fc" id="L50">            return this;</span>
+        }
+
+        public Builder puntoPartida(String puntoPartida) {
+<span class="fc" id="L54">            this.puntoPartida = puntoPartida;</span>
+<span class="fc" id="L55">            return this;</span>
+        }
+
+        public Builder puntoLlegada(String puntoLlegada) {
+<span class="fc" id="L59">            this.puntoLlegada = puntoLlegada;</span>
+<span class="fc" id="L60">            return this;</span>
+        }
+
+        public Builder tipoCarga(TipoCarga tipoCarga) {
+<span class="fc" id="L64">            this.tipoCarga = tipoCarga;</span>
+<span class="fc" id="L65">            return this;</span>
+        }
+        
+        public Builder waypoints(java.util.List&lt;Waypoint&gt; waypoints) {
+<span class="fc" id="L69">            this.waypoints = waypoints;</span>
+<span class="fc" id="L70">            return this;</span>
+        }
+
+        public Builder estado(EstadoMision estado) {
+<span class="fc" id="L74">            this.estado = estado;</span>
+<span class="fc" id="L75">            return this;</span>
+        }
+
+        public Builder prioridad(Prioridad prioridad) {
+<span class="fc" id="L79">            this.prioridad = prioridad;</span>
+<span class="fc" id="L80">            return this;</span>
+        }
+
+        public Mision build() {
+<span class="pc bpc" id="L84" title="1 of 4 branches missed.">            if (id == null || id.trim().isEmpty()) {</span>
+<span class="fc" id="L85">                throw new IllegalStateException(&quot;El id de la misión no puede ser nulo o vacío.&quot;);</span>
+            }
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">            if (drone == null) {</span>
+<span class="nc" id="L88">                throw new IllegalStateException(&quot;El drone asignado no puede ser nulo.&quot;);</span>
+            }
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">            if (!drone.disponible()) {</span>
+<span class="nc" id="L91">                throw new IllegalStateException(&quot;El drone asignado no está disponible en este momento.&quot;);</span>
+            }
+<span class="pc bpc" id="L93" title="2 of 4 branches missed.">            if (puntoPartida == null || puntoPartida.trim().isEmpty()) {</span>
+<span class="nc" id="L94">                throw new IllegalStateException(&quot;El punto de partida no puede ser nulo o vacío.&quot;);</span>
+            }
+<span class="pc bpc" id="L96" title="2 of 4 branches missed.">            if (puntoLlegada == null || puntoLlegada.trim().isEmpty()) {</span>
+<span class="nc" id="L97">                throw new IllegalStateException(&quot;El punto de llegada no puede ser nulo o vacío.&quot;);</span>
+            }
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">            if (tipoCarga == null) {</span>
+<span class="nc" id="L100">                throw new IllegalStateException(&quot;El tipo de carga no puede ser nulo.&quot;);</span>
+            }
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">            if (prioridad == null) {</span>
+<span class="nc" id="L103">                throw new IllegalStateException(&quot;La prioridad no puede ser nula.&quot;);</span>
+            }
+
+<span class="fc" id="L106">            return new Mision(this);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

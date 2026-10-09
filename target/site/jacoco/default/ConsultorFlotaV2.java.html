@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ConsultorFlotaV2.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">aquaport</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">ConsultorFlotaV2.java</span></div><h1>ConsultorFlotaV2.java</h1><pre class="source lang-java linenums">import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.Comparator;
+import java.util.stream.Collectors;
+
+<span class="fc" id="L8">public class ConsultorFlotaV2 {</span>
+
+    /**
+     * 1) Agrupar drones disponibles por tipo.
+     */
+    public Map&lt;String, List&lt;DroneAcuatico&gt;&gt; agruparDronesDisponiblesPorTipo(List&lt;DroneAcuatico&gt; flota) {
+<span class="fc" id="L14">        return flota.stream()</span>
+<span class="fc" id="L15">                .filter(DroneAcuatico::disponible)</span>
+<span class="fc" id="L16">                .collect(Collectors.groupingBy(DroneAcuatico::getTipo));</span>
+    }
+
+    /**
+     * 2) Obtener el drone óptimo para una zona dada (mayor batería, tipo compatible).
+     * Nota: Para simplificar, asumimos que todos los tipos podrían ser compatibles si coinciden con un &quot;tipoNecesario&quot;.
+     */
+    public Optional&lt;DroneAcuatico&gt; obtenerDroneOptimo(List&lt;DroneAcuatico&gt; flota, String zonaDestino, String tipoNecesario) {
+<span class="fc" id="L24">        return flota.stream()</span>
+<span class="fc" id="L25">                .filter(DroneAcuatico::disponible)</span>
+<span class="fc" id="L26">                .filter(d -&gt; d.getTipo().equalsIgnoreCase(tipoNecesario))</span>
+                // Podríamos filtrar por cercanía a la zona, pero usaremos batería como principal criterio de optimización.
+<span class="fc" id="L28">                .max(Comparator.comparingInt(DroneAcuatico::getBateria));</span>
+    }
+
+    /**
+     * 3) Calcular el promedio de batería por tipo de drone.
+     */
+    public Map&lt;String, Double&gt; promedioBateriaPorTipo(List&lt;DroneAcuatico&gt; flota) {
+<span class="fc" id="L35">        return flota.stream()</span>
+<span class="fc" id="L36">                .collect(Collectors.groupingBy(</span>
+                        DroneAcuatico::getTipo,
+<span class="fc" id="L38">                        Collectors.averagingInt(DroneAcuatico::getBateria)</span>
+                ));
+    }
+
+    /**
+     * 4) Separar misiones CRÍTICAS de las demás usando partitioningBy.
+     * Retorna un Map donde `true` son misiones CRÍTICAS y `false` son las demás.
+     */
+    public Map&lt;Boolean, List&lt;Mision&gt;&gt; separarMisionesCriticas(List&lt;Mision&gt; misiones) {
+<span class="fc" id="L47">        return misiones.stream()</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">                .collect(Collectors.partitioningBy(m -&gt; m.getPrioridad() == Prioridad.CRITICA));</span>
+    }
+
+    /**
+     * 5) Listar todas las zonas únicas que cubre la flota activa (disponible o en misión).
+     */
+    public Set&lt;String&gt; obtenerZonasUnicasActivas(List&lt;DroneAcuatico&gt; flota) {
+<span class="fc" id="L55">        return flota.stream()</span>
+<span class="pc bpc" id="L56" title="1 of 4 branches missed.">                .filter(d -&gt; d.getEstado() == EstadoDrone.DISPONIBLE || d.getEstado() == EstadoDrone.EN_MISION)</span>
+<span class="fc" id="L57">                .map(DroneAcuatico::getZona)</span>
+<span class="fc" id="L58">                .collect(Collectors.toSet());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
