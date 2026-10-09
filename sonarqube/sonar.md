@@ -25,11 +25,11 @@ No se utilizaron anotaciones `@SuppressWarnings`. La deuda técnica ha sido miti
 Si deseas levantar tu propio servidor de SonarQube y visualizar el dashboard en tu máquina, la forma más limpia y profesional de hacerlo es utilizando **Docker**. Sigue estos pasos:
 
 ### Paso 1: Levantar el Servidor (Docker)
-Abre tu terminal y ejecuta el siguiente comando para descargar e iniciar la imagen oficial de SonarQube Community LTS:
+Abre tu terminal y ejecuta el siguiente comando para descargar e iniciar la imagen oficial más reciente de SonarQube Community:
 ```bash
-docker run -d --name sonarqube -p 9000:9000 sonarqube:lts-community
+docker run -d --name sonarqube -p 9000:9000 sonarqube:community
 ```
-*Nota: Puede tardar unos minutos en arrancar.*
+*Nota: Si ves un banner de actualización en la versión LTS, puedes ignorarlo o utilizar la etiqueta `:community` como se muestra arriba para tener la última versión.*
 
 ### Paso 2: Acceder al Dashboard
 1. Abre tu navegador web y ve a `http://localhost:9000`.
