@@ -4,8 +4,9 @@ public class Mision {
     private final String puntoPartida;
     private final String puntoLlegada;
     private final TipoCarga tipoCarga;
-    private final EstadoMision estado;
+    private EstadoMision estado;
     private final Prioridad prioridad;
+    private final java.util.List<Waypoint> waypoints; // Para la v3
 
     private Mision(Builder builder) {
         this.id = builder.id;
@@ -15,6 +16,7 @@ public class Mision {
         this.tipoCarga = builder.tipoCarga;
         this.estado = builder.estado;
         this.prioridad = builder.prioridad;
+        this.waypoints = builder.waypoints != null ? builder.waypoints : new java.util.ArrayList<>();
     }
 
     public String getId() { return id; }
@@ -24,6 +26,9 @@ public class Mision {
     public TipoCarga getTipoCarga() { return tipoCarga; }
     public EstadoMision getEstado() { return estado; }
     public Prioridad getPrioridad() { return prioridad; }
+    public java.util.List<Waypoint> getWaypoints() { return waypoints; }
+    
+    public void setEstado(EstadoMision estado) { this.estado = estado; }
 
     public static class Builder {
         private String id;
@@ -33,6 +38,7 @@ public class Mision {
         private TipoCarga tipoCarga;
         private EstadoMision estado = EstadoMision.PENDIENTE;
         private Prioridad prioridad = Prioridad.NORMAL;
+        private java.util.List<Waypoint> waypoints = new java.util.ArrayList<>();
 
         public Builder id(String id) {
             this.id = id;
@@ -56,6 +62,11 @@ public class Mision {
 
         public Builder tipoCarga(TipoCarga tipoCarga) {
             this.tipoCarga = tipoCarga;
+            return this;
+        }
+        
+        public Builder waypoints(java.util.List<Waypoint> waypoints) {
+            this.waypoints = waypoints;
             return this;
         }
 
