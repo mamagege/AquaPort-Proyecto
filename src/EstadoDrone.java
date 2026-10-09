@@ -3,5 +3,6 @@ public enum EstadoDrone {
     EN_MISION,
     RECARGANDO,
     MANTENIMIENTO,
-    SUMERGIDO
+    SUMERGIDO,
+    FALLO
 }
