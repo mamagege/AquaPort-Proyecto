@@ -55,15 +55,15 @@
 > "Actúa como diseñador UX/UI senior de sistemas de monitoreo ambiental. SISTEMA: AquaPort — Panel de control de flota de drones acuáticos ECI. PANTALLA: Panel de monitoreo de la flota. ESTILO: Paleta azul profundo y cian técnico. Fondo oscuro tipo dashboard técnico hídrico. ACTOR: Operador Hídrico. DATOS A MOSTRAR POR DRONE: ID (formato AQ-XX), batería en %, estado con colores (DISPONIBLE Verde, EN_MISION Azul, RECARGANDO Ámbar, MANTENIMIENTO Gris, FALLO Rojo), zona actual. ESTADO DE LA PANTALLA: [Variable según estado]. Diseño UI de alta calidad, Dribbble style, sin marcos de dispositivo."
 
 ### Estado 1: Normal
-![Estado Normal](file:///c:/Users/USUARIO/Desktop/Universidad/DOWS/CORTE02/AquaPort-Proyecto/docs/requerimientos/img/panel_normal.jpg)
+![Estado Normal](img/panel_normal.jpg)
 - **Justificación:** Muestra la flota operando con normalidad. Permite al operador ver rápidamente qué drones están "Disponible" (verde) listos para recibir misiones, cuáles están "En Misión" (azul) y cuáles están "Recargando" (ámbar).
 
 ### Estado 2: Alerta
-![Estado Alerta](file:///c:/Users/USUARIO/Desktop/Universidad/DOWS/CORTE02/AquaPort-Proyecto/docs/requerimientos/img/panel_alerta.jpg)
+![Estado Alerta](img/panel_alerta.jpg)
 - **Justificación:** Resalta un drone en estado FALLO. Se utiliza iluminación y componentes en color rojo intenso, atrayendo inmediatamente la atención periférica del operador para que tome acción urgente.
 
 ### Estado 3: Vacío (Empty State)
-![Estado Vacío](file:///c:/Users/USUARIO/Desktop/Universidad/DOWS/CORTE02/AquaPort-Proyecto/docs/requerimientos/img/panel_vacio.jpg)
+![Estado Vacío](img/panel_vacio.jpg)
 - **Justificación:** Cuando todos los drones están ocupados y no hay opciones disponibles, en lugar de mostrar una pantalla en blanco que parece un error, se presenta un gráfico técnico indicando claramente la razón ("Todos los drones se encuentran en misión").
 
 ### Cumplimiento de Heurísticas de Nielsen
