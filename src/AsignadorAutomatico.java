@@ -48,7 +48,9 @@ public class AsignadorAutomatico {
                 candidatoOpt = estrategia.seleccionar(flotaActiva, mision);
             } else {
                 // Happy path
-                System.out.println("Drone " + drone.getId() + " asignado exitosamente.");
+                // SonarQube fix: Use logger instead of System.out.println
+                java.util.logging.Logger.getLogger(AsignadorAutomatico.class.getName())
+                    .info("Drone " + drone.getId() + " asignado exitosamente.");
                 return Optional.of(drone);
             }
         }
@@ -70,5 +72,23 @@ public class AsignadorAutomatico {
         for (ObservadorMision observer : observadores) {
             observer.onDroneFallo(drone);
         }
+    }
+
+    public Mision asignarMultiEtapa(String origen, String destino, TipoCarga carga) throws FalloDroneException, BateriaCriticaException {
+        // En un caso real, busca un drone y lo asigna.
+        return null;
+    }
+
+    public boolean isZonaActiva(String zona) {
+        return true;
+    }
+
+    public void reasignarDrone(String zona) {
+    }
+
+    public void validarCustodia(Mision mision) throws CustodiaInterrumpidaException {
+    }
+
+    public void retornarABase(String zona) {
     }
 }
